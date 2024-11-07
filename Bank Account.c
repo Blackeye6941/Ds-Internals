@@ -1,3 +1,18 @@
+/*Design a banking system using a linked list to efficiently manage customer accounts and transactions.
+Requirements:
+Create a linked list node structure to represent customer accounts, including:
+Account number,Customer name,Balance,Next node pointer,Transaction history (linked list of transactions )
+
+Implement functions for:
+Creating new accounts,Depositing and withdrawing funds,Displaying account information and transaction history[Not Implemented],
+Transferring funds between accounts,
+Searching for accounts by account number or customer name
+
+Handle errors for:
+Attempting to access a non-existent account,
+Insufficient funds for transactions
+*/
+
 #include<stdio.h>
 #include<time.h>
 #include<stdlib.h>
