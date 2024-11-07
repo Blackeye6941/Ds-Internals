@@ -1,3 +1,6 @@
+/*
+Convert a given binary tree into a doubly linked list in in-order traversal.
+*/
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX_SIZE 100
@@ -25,6 +28,35 @@ struct Queue{
     int front;
     int rear;
 };
+
+struct Stack{
+    struct Tree* a[MAX_SIZE];
+    int top;
+};
+
+void CreateS(struct Stack* S){
+    S->top = -1;
+}
+
+void Push(struct Stack*S, struct Tree* node){
+    if(S->top == MAX_SIZE - 1){
+        printf("\nStack is Full");
+    }
+    else{
+        S->a[++S->top] = node;
+    }
+}
+
+struct Tree* Pop(struct Stack* S){
+    struct Tree* node;
+    if(S->top == -1){
+        printf("\nThe stack is Empty");
+    }
+    else{
+        node = S->a[S->top--];
+    }
+    return node;
+}
 
 void CreateQ(struct Queue* Q){
     Q->front =-1;
@@ -61,8 +93,8 @@ struct Tree* Dequeue(struct Queue* Q){
     return node;
 }
 
-int isEmpty(struct Queue* Q){
-    if(Q->rear == MAX_SIZE - 1){
+int isEmpty(struct Stack* S){
+    if(S->top == -1){
         return 1;
     }
     else{
@@ -107,11 +139,46 @@ struct Tree* Insert_BT(struct Tree* root, int data){
     return root;
 }
 
+struct Node* Insert_LL(struct Tree* root, struct Node* head){
+    struct Tree* curr = root;
+    struct Node* temp = NULL;
+    struct Node* new;
+    struct Stack S;
+    CreateS(&S);
+    while(curr != NULL || !isEmpty(&S)){
+        while(curr != NULL){
+            Push(&S, curr);
+            curr = curr->lchild;
+        }
+        curr = Pop(&S);
+        new = getNode(curr->data);
+        if(head == NULL){
+            head = new;
+            temp = head;
+        }
+        else{
+            temp->next = new;
+            new->prev = temp;
+            temp = temp->next;
+        }
+        curr = curr->rchild;
+    }
+    return head;
+}
+
 void Display_BT(struct Tree* root){
     if(root){
         Display_BT(root->lchild);
         printf("%d ", root->data);
         Display_BT(root->rchild);
+    }
+}
+
+void Display_LL(struct Node* head){
+    struct Node* temp = head;
+    while(temp != NULL){
+        printf("%d ", temp->data);
+        temp = temp->next;
     }
 }
 
@@ -132,11 +199,12 @@ int main(){
                 printf("\nBinary Tree: ");
                 Display_BT(root);
                 break;
-            /*case 2:
+            case 2:
                 printf("\nConverted Doubly linked list: ");
-                head = Insert_LL(root);
+                head = Insert_LL(root, head);
                 Display_LL(head);
-                break;*/
+                head = NULL;
+                break;
             case 3:
                 printf("\nCode Exited!!\n");
                 exit(0);
