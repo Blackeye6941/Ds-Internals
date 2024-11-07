@@ -1,3 +1,12 @@
+/*
+Implement a phone directory using a Binary Search Tree (BST). Your system should allow:
+1. Adding new contacts to the directory.
+2. Deleting a contact from the directory.
+3. Searching for a contact by name.
+4. Displaying the directory in sorted order.
+5. Demonstrate these operations with test cases showing the structure of the BST before and after each operation.
+*/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -67,9 +76,9 @@ void search(Contact *root,char name[]){
   Contact *temp = root;
   int flag = 0;
   while(temp != NULL){
-    if(strcmp(temp->name,name) > 0){
+    if(strcmp(name,temp->name) < 0){
       temp = temp->leftChild;
-    }else if(strcmp(temp->name,name) < 0){
+    }else if(strcmp(name,temp->name) > 0){
       temp = temp->rightChild;
     }else{
       flag = 1;
@@ -103,10 +112,10 @@ Contact* deleteContact(Contact *root,char name[]){
   }
 
   while(temp != NULL){
-    if(strcmp(temp->name,name) > 0){
+    if(strcmp(name,temp->name) < 0){
       parent = temp;
       temp = temp->leftChild;
-    }else if(strcmp(temp->name,name) < 0){
+    }else if(strcmp(name,temp->name) > 0){
       parent = temp;
       temp = temp->rightChild;
     }else{
@@ -198,7 +207,7 @@ void main(){
 
       case 2: printf("\nEnter the name: ");
               scanf("%s",name);
-              deleteContact(root,name);
+              root = deleteContact(root,name);
       break;
 
       case 3: printf("\nEnter the name to search: ");
