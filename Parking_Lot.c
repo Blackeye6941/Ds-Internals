@@ -1,15 +1,15 @@
 /*
 Design a parking management system that utilizes a stack data structure to efficiently manage vehicle entries and exits. The system should ensure that the last vehicle that enters the parking lot is the first to exit.
 Requirements:
-Implement a stack to store vehicle information (e.g., license plate number, entry time).
+  Implement a stack to store vehicle information (e.g., license plate number, entry time).
 Develop functions for:
-Vehicle entry: Push vehicle information onto the stack.
-Vehicle exit: Pop the top element from the stack and display the exiting vehicle's information.
-Display parking status: Show the number of vehicles currently parked.
-Search vehicle: Check if a specific vehicle is parked.
+  Vehicle entry: Push vehicle information onto the stack.
+  Vehicle exit: Pop the top element from the stack and display the exiting vehicle's information.
+  Display parking status: Show the number of vehicles currently parked.
+  Search vehicle: Check if a specific vehicle is parked.
 Handle errors for:
-Attempting to exit a vehicle when the parking lot is empty.
-Searching for a vehicle not in the parking lot.
+  Attempting to exit a vehicle when the parking lot is empty.
+  Searching for a vehicle not in the parking lot.
 */
 
 #include<stdio.h>
