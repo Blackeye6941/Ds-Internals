@@ -1,6 +1,5 @@
 /*
-Implement a simple calculator that converts infix expressions to postfix notation for
-evaluation.
+Implement a simple calculator that converts infix expressions to postfix notation for evaluation.
 */
 
 #include<stdio.h>
