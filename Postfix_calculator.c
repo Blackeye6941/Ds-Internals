@@ -13,7 +13,7 @@ struct lifo{
 };
 
 typedef struct lifo stack;
-char s1[MAX_SIZE];
+char postfix[MAX_SIZE];
 int i=0;
 
 void createStack(stack *s){
@@ -77,7 +77,7 @@ void conversion(stack *s,char element){
       push(s,element);
     }else if(element == ')'){
       while(s->st[s->top] != '('){
-        s1[i++] = pop(s);
+        postfix[i++] = pop(s);
       }
       pop(s);
     }else{
@@ -85,19 +85,19 @@ void conversion(stack *s,char element){
         if(isEmpty(s)){
           break;
         }
-        s1[i++] = pop(s);
+        postfix[i++] = pop(s);
       }
       push(s,element);
     }
   }else{
-    s1[i++] = element;
+    postfix[i++] = element;
   }
 }
 
 void accept_values(int values[]){
   int j=0;
   char c;
-  while((c=s1[j])!='\0'){
+  while((c=postfix[j])!='\0'){
     if(!isOperator(c) && !values[c-65]){
       printf("Enter value of %c: ",c);
       scanf("%d",&values[c-65]);
@@ -139,27 +139,27 @@ void main(){
   int values[58] = {0};
   createStack(&s);
 
-  char s2[MAX_SIZE];
+  char infix[MAX_SIZE];
   printf("Enter the infix expression: ");
-  scanf("%s",s2);
+  scanf("%s",infix);
 
   int j=0,n;
   char c;
-  while((c=s2[j++])!='\0'){
+  while((c=infix[j++])!='\0'){
     conversion(&s,c);
   }
 
   while(!isEmpty(&s)){
-    s1[i++] = pop(&s);
+    postfix[i++] = pop(&s);
   }
-  s1[i] = '\0';
-  printf("Postfix: %s\n\n",s1);
+  postfix[i] = '\0';
+  printf("Postfix: %s\n\n",postfix);
 
   accept_values(values);
   
   createStack(&s);
   j=0;
-  while((c=s1[j++])!='\0'){
+  while((c=postfix[j++])!='\0'){
     evaluate(&s,c,values);
   }
 
