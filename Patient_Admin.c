@@ -1,4 +1,6 @@
-/*IV. Design a system to manage patient priorities in a hospital. Implement the following:
+/*
+4.
+Design a system to manage patient priorities in a hospital. Implement the following:
 
 1. A max heap to manage patient priorities where higher priority patients are served
    first. 

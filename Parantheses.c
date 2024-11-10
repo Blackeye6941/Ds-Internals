@@ -1,4 +1,6 @@
-/*V. Implement a program using a stack to check whether a string containing parentheses ( and) is balanced. Demonstrate your solution with various test cases.
+/*
+5. 
+Implement a program using a stack to check whether a string containing parentheses ( and) is balanced. Demonstrate your solution with various test cases.
 */
 #include <stdio.h>
 #include <string.h>

@@ -1,4 +1,5 @@
 /*
+3.
 Implement a phone directory using a Binary Search Tree (BST). Your system should allow:
 1. Adding new contacts to the directory.
 2. Deleting a contact from the directory.

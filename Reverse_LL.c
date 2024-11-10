@@ -1,4 +1,6 @@
-/*Implement a program to reverse a singly linked list.
+/*
+6.
+Implement a program to reverse a singly linked list.
 Write functions to create the linked list, reverse it, and display the list before and after reversal. Demonstrate your solution with sample data.*/
 
 

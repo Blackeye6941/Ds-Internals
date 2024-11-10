@@ -1,4 +1,5 @@
 /*
+17.
 Design a parking management system that utilizes a stack data structure to efficiently manage vehicle entries and exits. The system should ensure that the last vehicle that enters the parking lot is the first to exit.
 Requirements:
   Implement a stack to store vehicle information (e.g., license plate number, entry time).

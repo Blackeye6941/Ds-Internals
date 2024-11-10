@@ -1,4 +1,5 @@
 /*
+2.
 Design a simplified social network where each user has a list of friends. Implement the following:
 1. A singly linked list to store a user’s friends.
 2. Functions to add a new friend, remove a friend, and display the list of friends.

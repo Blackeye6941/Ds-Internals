@@ -1,4 +1,5 @@
-/* XVI
+/* 
+16.
 Create an efficient data structure to manage bookings in a hotel management system, ensuring easy insertion, deletion, searching, and retrieval of booking information.
 Requirements:
   Design a data structure to store booking information, including:
