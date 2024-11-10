@@ -1,323 +1,286 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+/* XVI
+Create an efficient data structure to manage bookings in a hotel management system, ensuring easy insertion, deletion, searching, and retrieval of booking information.
+Requirements:
+  Design a data structure to store booking information, including:
+  Booking ID (unique identifier)
+  Guest name
+  Room number
+  Check-in date
+  Check-out date
+  Room type (single, double, suite)
+Implement functions for:
+  Inserting new bookings
+  Deleting existing bookings
+  Searching bookings by booking ID or room number
+  Retrieving booking information by booking ID
+  Updating booking status
+  Displaying all bookings
+*/
 
-struct Booking {
-    int id;
-    char name[30];
-    int room_no;
-    char in_date[12];
-    char out_date[12];
-    int room_type;
-    struct Booking* next;
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<time.h>
+
+struct Node{
+  char name[20],check_in[20],check_out[20],room_type[20];
+  int id,room_no;
+  struct Node *next;
+  struct Node *prev;
 };
 
-struct Booking* CreateBooking() {
-    struct Booking* temp = (struct Booking*)malloc(sizeof(struct Booking));
-    return temp;
+typedef struct Node Room;
+
+Room* getRoom(){
+  Room *newRoom = (Room*)malloc(sizeof(Room));
+  return newRoom;
 }
 
-struct Booking* Insert_Booking(struct Booking* head) {
-    int id;
-    char name[30];
-    int room_no;
-    char in_date[12];
-    char out_date[12];
-    int room_type;
-
-    printf("\nEnter Unique Booking ID: ");
-    scanf("%d", &id);
-    printf("\nEnter Guest Name: ");
-    scanf("%s", name);
-    printf("\nEnter room number: ");
-    scanf("%d", &room_no);
-    
-    // Check if the room is already booked
-    struct Booking* temp2 = head;
-    while(temp2 != NULL) {
-        if(temp2->room_no == room_no) {
-            printf("\nRoom already Booked!!\n");
-            return head;
-        }
-        temp2 = temp2->next;
+int idExists(Room *bookings, int id){
+  Room *temp = bookings;
+  while(temp != NULL){
+    if(temp->id == id){
+      return 1;
     }
-    
-    printf("\nEnter Check-In date (DD/MM/YY): ");
-    scanf("%s", in_date);
-    printf("\nEnter Check-Out date (DD/MM/YY): ");
-    scanf("%s", out_date);
-    printf("\nEnter Room type (1. Single, 2. Double, 3. Suite): ");
-    scanf("%d", &room_type);
-
-    struct Booking* new = CreateBooking();
-    new->id = id;
-    new->room_no = room_no;
-    new->room_type = room_type;
-    strcpy(new->name, name);
-    strcpy(new->in_date, in_date);
-    strcpy(new->out_date, out_date);
-    new->next = NULL;
-
-    // Insert at the end of the list
-    if(head == NULL) {
-        head = new;
-    } else {
-        struct Booking* temp = head;
-        while(temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = new;
-    }
-    return head;
+    temp = temp->next;
+  }
+  return 0;
 }
 
-void Display(struct Booking* head) {
-    struct Booking* temp = head;
-    printf("\n--------------------------------------------------");
-    if(temp == NULL) {
-        printf("\nNo Bookings");
-    } else {
-        while(temp != NULL) {
-            printf("\nBooking ID: %d", temp->id);
-            printf("\nGuest Name: %s", temp->name);
-            printf("\nRoom number: %d", temp->room_no);
-            printf("\nCheck In date: %s", temp->in_date);
-            printf("\nCheck Out date: %s", temp->out_date);
-            if(temp->room_type == 1) {
-                printf("\nRoom Type: Single");
-            } else if(temp->room_type == 2) {
-                printf("\nRoom Type: Double");
-            } else {
-                printf("\nRoom Type: Suite");
-            }
-            printf("\n--------------------------------------------------");
-            temp = temp->next;
-        }
-    }
+void display(Room *booking){
+  printf("\nBooking id: %d\n",booking->id);
+  printf("Guest name: %s\n",booking->name);
+  printf("Room number: %d\n",booking->room_no);
+  printf("Check-in date: %s\n",booking->check_in);
+  printf("Check-out date: %s\n",booking->check_out);
+  printf("Room type: %s\n",booking->room_type);
 }
 
-struct Booking* Delete_Booking(struct Booking* head) {
-    int id;
-    struct Booking* temp = head;
-    struct Booking* prev = NULL;
+Room* insert(Room *bookings,char name[],int room_no,char check_in[],char check_out[],char room_type[]){
+  Room *newRoom = getRoom();
+  if(newRoom == NULL){
+    printf("\nInufficient memory\n");
+    return bookings;
+  }
 
-    if(head == NULL) {
-        printf("\nNo bookings to delete!");
-        return head;
+  int id;
+  do{
+    id = rand() % 90000 + 10000;
+  }while (idExists(bookings, id));
+
+  newRoom->id = id;
+  strcpy(newRoom->name,name);
+  newRoom->room_no = room_no;
+  strcpy(newRoom->check_in,check_in);
+  strcpy(newRoom->check_out,check_out);
+  strcpy(newRoom->room_type,room_type);
+  newRoom->next = NULL;
+
+  if(bookings == NULL){
+    newRoom->prev = NULL;
+    printf("\nRoom booked successfully\n");
+    display(newRoom);
+    return newRoom;
+  }
+
+  Room *temp = bookings;
+  while(temp->next != NULL){
+    temp = temp->next;
+  }
+  temp->next = newRoom;
+  newRoom->prev = temp;
+
+  printf("\nRoom booked successfully\n");
+  display(newRoom);
+  return bookings;
+}
+
+Room* searchId(Room *bookings,int id){
+  Room *temp = bookings;
+  while(temp != NULL && temp->id != id){
+    temp = temp->next;
+  }
+  return temp;
+}
+
+Room* searchRoom(Room *bookings,int room_no){
+  Room *temp = bookings;
+  while(temp != NULL && temp->room_no != room_no){
+    temp = temp->next;
+  }
+  return temp;
+}
+
+void retrieveBooking(Room *bookings,int id){
+  Room *temp = searchId(bookings,id);
+  if(temp == NULL){
+    printf("\nBooking not found\n");
+  }else{
+    display(temp);
+  }
+}
+
+Room* delete(Room *bookings,int id){
+  Room *temp = searchId(bookings,id);
+  if(temp == NULL){
+    printf("\nBooking not found\n");
+  }else{
+    if(temp->prev == NULL){
+      bookings = bookings->next;
+      if(bookings != NULL){
+        bookings->prev = NULL;
+      }
+    }else{
+      temp->prev->next = temp->next;
+      if(temp->next != NULL){
+        temp->next->prev = temp->prev;
+      }
     }
-
-    printf("\nEnter Booking Id to delete: ");
-    scanf("%d", &id);
-
-    // Special case for head node
-    if(temp != NULL && temp->id == id) {
-        head = temp->next;  // Update head
-        free(temp);
-        printf("\nBooking %d Deleted\n", id);
-        return head;
-    }
-
-    // Search for the booking to delete
-    while(temp != NULL && temp->id != id) {
-        prev = temp;
-        temp = temp->next;
-    }
-
-    if(temp == NULL) {
-        printf("\nBooking ID not found\n");
-        return head;
-    }
-
-    // Unlink the node from the linked list
-    prev->next = temp->next;
+    printf("\nBooking deleted successfully\n");
     free(temp);
-    printf("\nBooking %d Deleted\n", id);
-
-    return head;
+  }
+  return bookings;
 }
 
-void Search_Booking(struct Booking* head) {
-    int op, id, room_no;
-    struct Booking* temp = head;
-    printf("\n1. Search By ID\n2. Search by Room Number: ");
-    scanf("%d", &op);
+void update(Room *bookings,int id){
+  Room *temp = searchId(bookings,id);
+  if(temp == NULL){
+    printf("\nBooking not found\n");
+    return;
+  }
 
-    if(op == 1) {
-        printf("\nEnter ID: ");
-        scanf("%d", &id);
-        while(temp != NULL && temp->id != id) {
-            temp = temp->next;
-        }
-        if(temp == NULL) {
-            printf("\nBooking not found!\n");
-        } else {
-            printf("\nBooking found!\nRoom no: %d\tGuest name: %s\n", temp->room_no, temp->name);
-        }
+  do{
+    printf("\nEnter a choice to update\n");
+    printf("1.Guest name\n");
+    printf("2.Room number\n");
+    printf("3.Check-in date\n");
+    printf("4.Check-out date\n");
+    printf("5.Room type\n");
+    printf("6.Finish update\n");
+
+    int c;
+    scanf("%d",&c);
+    switch(c){
+      case 1: printf("\nEnter the name: ");
+              scanf("%s",temp->name);
+      break;
+
+      case 2: printf("\nEnter room no: ");
+              scanf("%d",&temp->room_no);
+      break;
+
+      case 3: printf("\nEnter check-in date: ");
+              scanf("%s",temp->check_in);
+      break;
+
+      case 4: printf("\nEnter check-out date: ");
+              scanf("%s",temp->check_out);
+      break;
+
+      case 5: printf("\nEnter room type: ");
+              scanf("%s",temp->room_type);
+      break;
+
+      case 6: return;
+
+      default: printf("\nEnter a correct option\n");
     }
-    else if(op == 2) {
-        printf("\nEnter Room Number: ");
-        scanf("%d", &room_no);
-        while(temp != NULL && temp->room_no != room_no) {
-            temp = temp->next;
-        }
-        if(temp == NULL) {
-            printf("\nBooking not found!\n");
-        } else {
-            printf("\nBooking found!\nRoom no: %d\tGuest name: %s\n", temp->room_no, temp->name);
-        }
-    }
-    else {
-        printf("\nInvalid choice!\n");
-    }
+  }while(1);
 }
 
-void Retrieve_Booking(struct Booking* head) {
-    int op, id, room_no;
-    struct Booking* temp = head;
-    printf("\n1. Search By ID\n2. Search by Room Number: ");
-    scanf("%d", &op);
-
-    if(op == 1) {
-        printf("\nEnter ID: ");
-        scanf("%d", &id);
-        while(temp != NULL && temp->id != id) {
-            temp = temp->next;
-        }
-        if(temp == NULL) {
-            printf("\nBooking not found!\n");
-        } else {
-            printf("\nBooking ID: %d", temp->id);
-            printf("\nGuest Name: %s", temp->name);
-            printf("\nRoom number: %d", temp->room_no);
-            printf("\nCheck In date: %s", temp->in_date);
-            printf("\nCheck Out date: %s", temp->out_date);
-            if(temp->room_type == 1) {
-                printf("\nRoom Type: Single");
-            } else if(temp->room_type == 2) {
-                printf("\nRoom Type: Double");
-            } else {
-                printf("\nRoom Type: Suite");
-            }
-        }
-    }
-    else if(op == 2) {
-        printf("\nEnter Room Number: ");
-        scanf("%d", &room_no);
-        while(temp != NULL && temp->room_no != room_no) {
-            temp = temp->next;
-        }
-        if(temp == NULL) {
-            printf("\nBooking not found!\n");
-        } else {
-            printf("\nBooking ID: %d", temp->id);
-            printf("\nGuest Name: %s", temp->name);
-            printf("\nRoom number: %d", temp->room_no);
-            printf("\nCheck In date: %s", temp->in_date);
-            printf("\nCheck Out date: %s", temp->out_date);
-            if(temp->room_type == 1) {
-                printf("\nRoom Type: Single");
-            } else if(temp->room_type == 2) {
-                printf("\nRoom Type: Double");
-            } else {
-                printf("\nRoom Type: Suite");
-            }
-        }
-    }
-    else {
-        printf("\nInvalid choice!\n");
-    }
+void displayAll(Room *bookings){
+  Room *temp = bookings;
+  if(temp == NULL){
+    printf("\nNo Bookings\n");
+    return;
+  }
+  int i=1;
+  while(temp != NULL){
+    printf("\nBooking %d",i);
+    display(temp);
+    temp = temp->next;
+    i++;
+  }
 }
 
-struct Booking* Update_Booking(struct Booking* head) {
-    struct Booking* temp = head;
-    int id, p;
-    char name[30];
-    int room_no;
-    char in_date[12];
-    char out_date[12];
-    int room_type;
+void main(){
+  srand(time(0));
+  Room *bookings = NULL;
 
-    printf("\nEnter booking ID: ");
-    scanf("%d", &id);
+  do{
+    printf("\nEnter a choice\n");
+    printf("1.Insert new Booking\n");
+    printf("2.Delete existing booking\n");
+    printf("3.Search booking\n");
+    printf("4.Retrieve booking information\n");
+    printf("5.Update booking status\n");
+    printf("6.Display all bookings\n");
+    printf("7.Exit\n");
+    
+    int c,id,room_no;
+    char name[20],check_in[20],check_out[20],room_type[20];
+    scanf("%d",&c);
+    switch(c){
+      case 1: printf("\nEnter guest name: ");
+              scanf("%s",name);
+              printf("Enter room no: ");
+              scanf("%d",&room_no);
+              printf("Enter check-in date: ");
+              scanf("%s",check_in);
+              printf("Enter check-out date: ");
+              scanf("%s",check_out);
+              printf("Enter the room_type: ");
+              scanf("%s",room_type);
+              bookings = insert(bookings,name,room_no,check_in,check_out,room_type);
+      break;
 
-    // Search for the booking by ID
-    while(temp != NULL && temp->id != id) {
-        temp = temp->next;
+      case 2: printf("\nEnter booking id to delete: ");
+              scanf("%d",&id);
+              bookings = delete(bookings,id);
+      break;
+
+      case 3: printf("\nEnter a choice\n");
+              printf("1.Search by booking id\n");
+              printf("2.Search by room no\n");
+
+              int c1;
+              Room *temp;
+              scanf("%d",&c1);
+              switch(c1){
+                case 1: printf("\nEnter booking id to searchId: ");
+                        scanf("%d",&id);
+                        temp = searchId(bookings,id);
+                break;
+
+                case 2: printf("\nEnter room no to searchId: ");
+                        scanf("%d",&room_no);
+                        temp = searchRoom(bookings,room_no);
+                break;
+              }
+
+              if(temp == NULL){
+                printf("Booking not found\n");
+              }else{
+                printf("Booking found\n");
+              }
+      break;
+
+      case 4: printf("\nEnter booking id to retrieve infromation: ");
+              scanf("%d",&id);
+              retrieveBooking(bookings,id);
+      break;
+
+      case 5: printf("\nEnter the booking id to update: ");
+              scanf("%d",&id);
+              update(bookings,id);
+      break;
+
+      case 6: displayAll(bookings);
+      break;
+
+      case 7: exit(0);
+
+      default: printf("\nEnter a correct option\n");
     }
-
-    if(temp == NULL) {
-        printf("\nBooking not found!\n");
-    } else {
-        printf("\nBooking found!\nRoom no: %d\tGuest name: %s\n", temp->room_no, temp->name);
-        printf("\n1. Update Name\n2. Update Check-In date\n3. Update Room Number\n4. Update Room Type\n5. Update Check-Out date\nEnter operation: ");
-        scanf("%d", &p);
-
-        switch(p) {
-            case 1:
-                printf("\nEnter new name: ");
-                scanf("%s", name);
-                strcpy(temp->name, name);  // Corrected: strcpy instead of strncpy
-                break;
-            case 2:
-                printf("\nEnter new check-in date: ");
-                scanf("%s", in_date);
-                strcpy(temp->in_date, in_date);
-                break;
-            case 3:
-                printf("\nEnter new room number: ");
-                scanf("%d", &room_no);  // Corrected: use &room_no
-                temp->room_no = room_no;
-                break;
-            case 4:
-                printf("\nEnter new room type: ");
-                scanf("%d", &room_type);  // Corrected: use &room_type
-                temp->room_type = room_type;
-                break;
-            case 5:
-                printf("\nEnter new check-out date: ");
-                scanf("%s", out_date);
-                strcpy(temp->out_date, out_date);
-                break;
-            default:
-                printf("\nInvalid Input. Process Exited\n");
-        }
-    }
-    return head;
-}
-
-int main() {
-    int op;
-    struct Booking* head = NULL;
-
-    while(1) {
-        printf("\n1. Insert New Booking\n2. Delete Existing Booking\n3. Search Bookings by Id or Room Number\n4. Retrieve Booking Info\n5. Update Booking Status\n6. Display All Bookings\n7. Exit\nEnter process to be done: ");
-        scanf("%d", &op);
-
-        switch(op) {
-            case 1:
-                head = Insert_Booking(head);
-                break;
-            case 2:
-                head = Delete_Booking(head);
-                break;
-            case 3:
-                Search_Booking(head);
-                break;
-            case 4:
-                Retrieve_Booking(head);
-                break;
-            case 5:
-                head = Update_Booking(head);
-                break;
-            case 6:
-                Display(head);
-                break;
-            case 7:
-                exit(0);
-            default:
-                printf("\nEnter Valid Process!!\n");
-        }
-    }
-
-    return 0;
+  }while(1);
 }
