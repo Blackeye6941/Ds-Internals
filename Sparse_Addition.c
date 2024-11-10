@@ -1,3 +1,9 @@
+/*
+15.
+Implement a matrix addition algorithm for sparse matrices using arrays in C. A sparse matrix is a matrix in which most of the elements are zero. Given two sparse matrices represented in triplet form (where each entry in the array represents a non-zero element with its row, column, and value), write a C program to perform matrix addition and output the resulting sparse matrix in the same triplet form.
+*/
+
+
 #include <stdio.h>
 #define MAX_SIZE 20
 
