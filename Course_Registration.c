@@ -151,9 +151,9 @@ Course* removeEnroll(Course *course,char name[]){
 
   if(course->waitCount > 0){
     char name2[20];
-    strcpy(name2,course->waiting->name);
-    course->waiting = removeWaiting(course);
-    course = enroll(course,name2);
+    strcpy(name2,course->waiting->name);              //getting the name of first person in waiting list
+    course->waiting = removeWaiting(course);          //remove the first person from waitlist
+    course = enroll(course,name2);                    //add the person to enroll list
   }
   return course;
 }
